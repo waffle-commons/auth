@@ -9,7 +9,7 @@
 Waffle Auth Component
 =====================
 
-> **Release:** `v0.1.0-beta3` &nbsp;|&nbsp; [`CHANGELOG.md`](./CHANGELOG.md)
+> **Release:** `0.1.0-beta3` &nbsp;|&nbsp; [`CHANGELOG.md`](./CHANGELOG.md)
 
 The **Universal Authentication Bridge** (UAB, RFC-021): Waffle's entire authentication
 layer. Connect a Waffle application to popular authentication services **without technical
