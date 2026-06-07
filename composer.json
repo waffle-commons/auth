@@ -1,16 +1,16 @@
 {
-    "name": "waffle-commons/{COMPONENT_NAME}",
-    "description": "{COMPONENT_NAME} component for Waffle framework.",
+    "name": "waffle-commons/auth",
+    "description": "Auth component for Waffle framework.",
     "type": "library",
     "license": "MIT",
     "autoload": {
         "psr-4": {
-            "Waffle\\Commons\\{COMPONENT_NAME}\\": "src/"
+            "Waffle\\Commons\\Auth\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "WaffleTests\\Commons\\{COMPONENT_NAME}\\": "tests/src/"
+            "WaffleTests\\Commons\\Auth\\": "tests/src/"
         }
     },
     "authors": [
@@ -22,6 +22,14 @@
     "minimum-stability": "stable",
     "require": {
         "php": "^8.5",
+        "ext-openssl": "*",
+        "psr/http-client": "^1.0",
+        "psr/http-factory": "^1.0",
+        "psr/http-message": "^1.1 || ^2.0",
+        "psr/http-server-handler": "^1.0",
+        "psr/http-server-middleware": "^1.0",
+        "psr/log": "^3.0",
+        "psr/simple-cache": "^3.0",
         "waffle-commons/contracts": "self.version"
     },
     "require-dev": {
@@ -29,13 +37,15 @@
         "carthage-software/mago": "^1.29",
         "vimeo/psalm": "^6.16",
         "php-mock/php-mock-phpunit": "^2.15",
-        "cyclonedx/cyclonedx-php-composer": "^6.2"
+        "cyclonedx/cyclonedx-php-composer": "^6.2",
+        "igor-php/igor-php": "^0.6.3"
     },
     "scripts": {
         "formatter": "vendor/bin/mago fmt",
         "linter": "vendor/bin/mago lint",
         "analyzer": "vendor/bin/mago analyze",
         "guard": "vendor/bin/mago guard",
+        "igor": "vendor/bin/igor-php .",
         "phpunit": "vendor/bin/phpunit --log-junit var/data/phpunit-coverage/junit.xml --coverage-html var/data/phpunit-coverage",
         "benchmark": [
             "Composer\\Config::disableProcessTimeout",
