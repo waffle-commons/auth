@@ -5,6 +5,11 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and the project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 Released in lockstep with the Waffle Commons umbrella tag.
 
+## [0.1.0-beta4] — 2026-06-13
+
+### Changed
+- Worker-safety migration to igor-php 0.7 (`#[WorkerSafe]`); lockstep version bump with the Beta-4 wave. No new authentication behaviour since `0.1.0-beta3` — the RFC-021 Universal Authentication Bridge is unchanged.
+
 ## [0.1.0-beta3] — 2026-06-07
 
 **Theme: the Universal Authentication Bridge — every authN scheme, fail-closed, stateless (RFC-021).**
