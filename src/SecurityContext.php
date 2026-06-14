@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Waffle\Commons\Auth;
 
+use IgorPhp\IgorBundle\Attribute\WorkerSafe;
 use Waffle\Commons\Contracts\Auth\SecurityContextInterface;
 use Waffle\Commons\Contracts\Auth\UserIdentityInterface;
 
@@ -23,11 +24,13 @@ final class SecurityContext implements SecurityContextInterface
     private ?string $clientIp = null;
 
     #[\Override]
+    #[WorkerSafe(
+        scope: 'request-scoped',
+        reason: 'identity + IP set per request (RFC-021 §4.1); reset() clears them between worker loops',
+    )]
     public function authenticate(UserIdentityInterface $identity, ?string $clientIp = null): void
     {
-        // @igor-ignore: request-scoped identity holder BY DESIGN (RFC-021 §4.1); reset() wipes it between worker loops via ContainerInterface::reset().
         $this->identity = $identity;
-        // @igor-ignore: request-scoped IP binding paired with the identity above; cleared by the same reset() path.
         $this->clientIp = $clientIp;
     }
 
