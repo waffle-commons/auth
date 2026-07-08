@@ -5,6 +5,40 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and the project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 Released in lockstep with the Waffle Commons umbrella tag.
 
+## [0.1.0-beta5] — 2026-07-08
+
+**Theme: WebAuthn / passkeys (RFC-021 AUTH-01).**
+
+### Added
+- **WebAuthn / passkeys (AUTH-01)** — `WebAuthnLibAdapter`, the stateless
+  cryptographic core wrapping the audited `web-auth/webauthn-lib`
+  (registration + assertion ceremonies, `none` attestation, ES256/RS256). The
+  adapter takes a constructor-configurable **user-verification (UV) requirement**
+  (`'preferred'` default, `'required'` for passwordless logins). When
+  `'required'`, the requirement is advertised on both the registration and the
+  assertion options so the library's `CheckUserVerification` step rejects any
+  authenticator response missing the UV flag (fail-closed; an unsupported value
+  is rejected at construction).
+
+### Dependencies
+- Promoted `symfony/serializer` and `symfony/uid` from transitive to declared
+  `require` (used directly by `WebAuthnLibAdapter`).
+- Declared `spomky-labs/cbor-php` and `web-auth/cose-lib` in `require-dev`
+  (used directly by the WebAuthn test fixture).
+
+### Notes
+- **W3C-test-vector acceptance criterion (AUTH-01) — accepted, equivalent
+  substitution.** The criterion is satisfied via an *equivalent self-signing
+  fixture* (`tests/.../Helper/WebAuthnFixtureFactory`) rather than the literal
+  FIDO/W3C interop vectors, which do not ship offline with the installed
+  `web-auth/webauthn-lib` distribution. The fixture plays the authenticator role
+  end-to-end with the **same** audited primitives the adapter verifies with (a
+  real ES256 keypair via openssl, the `spomky-labs/cbor-php` CBOR encoder, and
+  the `web-auth/cose-lib` signer), so an accept is cryptographically equivalent
+  to passing a literal vector — only the keypair's provenance differs, not the
+  validation code path. The deviation is also documented prominently in the
+  fixture's class docblock.
+
 ## [0.1.0-beta4] — 2026-06-13
 
 ### Changed

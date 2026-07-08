@@ -29,6 +29,13 @@ namespace = "Waffle\\Commons\\Auth"
 permit = [
     "Waffle\\Commons\\Auth\\**",
     "Waffle\\Commons\\Contracts\\**",
+    # AUTH-01 (WebAuthn / passkeys): the audited cryptographic library wrapped
+    # exclusively by src/WebAuthn/WebAuthnLibAdapter.php. The Symfony surface is
+    # narrowed to exactly the two namespaces the adapter imports: the library's
+    # serializer (Serializer\SerializerInterface) and the zero-AAGUID (Uid\NilUuid).
+    "Webauthn\\**",
+    "Symfony\\Component\\Serializer\\**",
+    "Symfony\\Component\\Uid\\**",
     # Worker-safety audit tooling (igor-php 0.7+): dev-only #[WorkerSafe] metadata, inert at runtime.
     "IgorPhp\\IgorBundle\\Attribute\\**",
     "@layer:core",
@@ -96,7 +103,7 @@ assert-description = { enabled = false }
 literal-named-argument = { enabled = false }
 no-boolean-flag-parameter = { enabled = false }
 too-many-methods = { enabled = false }
-cyclomatic-complexity = { enabled = false }
+cyclomatic-complexity = { enabled = true, threshold = 50 }
 excessive-parameter-list = { enabled = false }
 single-class-per-file = { enabled = false }
 prefer-arrow-function = { enabled = false }
@@ -136,11 +143,21 @@ ignore = [
         "src/Oauth/Transaction/OauthTransactionCodec.php",
         "src/Uab/AuthBridgeVerifier.php",
         "src/Uab/UserAssertion.php",
+        # AUTH-01 WebAuthn wire boundary: the library-serialized options JSON and
+        # the PSR-7 assertion body are `mixed` by `json_decode()` signature. Every
+        # value is narrowed by an `is_array()`/`is_string()` guard and a shape
+        # violation throws the scheme's domain exception (fail-closed).
+        "src/WebAuthn/OptionsCodec.php",
+        "src/WebAuthn/WebAuthnAuthenticator.php",
         # Test-side PSR boundaries: PSR-7 getAttribute(), PSR-16 iterables, and
         # openssl key details are `mixed` by signature; every read is narrowed
         # by an `is_*()` guard or an immediate assertion.
         "tests/src/Middleware/AuthenticationMiddlewareTest.php",
         "tests/src/Helper/FakeCache.php",
         "tests/src/Helper/JwtMinter.php",
+        # AUTH-01 WebAuthn fixture: openssl_pkey_get_details() returns a `mixed`
+        # nested array; every component is narrowed by an `is_string()` guard
+        # (nonEmptyComponent) before use.
+        "tests/src/WebAuthn/Helper/WebAuthnFixtureFactory.php",
     ] },
 ]
