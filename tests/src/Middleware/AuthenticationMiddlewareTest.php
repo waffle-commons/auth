@@ -52,10 +52,41 @@ final class AuthenticationMiddlewareTest extends AbstractTestCase
             /** @var list<string> */
             public array $messages = [];
 
+            /** @var list<array<array-key, mixed>> */
+            public array $contexts = [];
+
             #[\Override]
             public function log(mixed $level, \Stringable|string $message, array $context = []): void
             {
                 $this->messages[] = (string) $message;
+                $this->contexts[] = $context;
+            }
+        };
+
+        $middleware = new AuthenticationMiddleware($this->bridge(), $logger);
+        $request = new FakeServerRequest(headers: [Constant::API_KEY_HEADER => 'wrong-key'], serverParams: [
+            'REMOTE_ADDR' => '203.0.113.7',
+        ]);
+
+        try {
+            $middleware->process($request, new PassHandler());
+            self::fail('An AuthenticationException was expected.');
+        } catch (AuthenticationException) {
+            self::assertSame(['Authentication rejected.'], $logger->messages);
+            self::assertSame('203.0.113.7', $logger->contexts[0]['ip'] ?? null);
+        }
+    }
+
+    public function testRejectionLogContextFallsBackToUnknownIpWhenAbsent(): void
+    {
+        $logger = new class extends AbstractLogger {
+            /** @var list<array<array-key, mixed>> */
+            public array $contexts = [];
+
+            #[\Override]
+            public function log(mixed $level, \Stringable|string $message, array $context = []): void
+            {
+                $this->contexts[] = $context;
             }
         };
 
@@ -66,7 +97,7 @@ final class AuthenticationMiddlewareTest extends AbstractTestCase
             $middleware->process($request, new PassHandler());
             self::fail('An AuthenticationException was expected.');
         } catch (AuthenticationException) {
-            self::assertSame(['Authentication rejected.'], $logger->messages);
+            self::assertSame('unknown', $logger->contexts[0]['ip'] ?? null);
         }
     }
 
