@@ -69,7 +69,11 @@ composer igor   # zero state-mutation errors (FrankenPHP)
 
 ## 📚 Documentation
 
-- RFC-021 — Universal Authentication Bridge (monorepo `project_system/RFCs/`).
-- Framework user docs: `documentation/how-to/authentication.md`,
-  `documentation/reference/auth.md`,
-  `documentation/explanation/authentication-universal-bridge.md`.
+Central framework docs live in the [waffle-commons/documentation](https://github.com/waffle-commons/documentation) repository:
+
+- Reference: [auth](https://github.com/waffle-commons/documentation/blob/main/reference/auth.md)
+- Reference: [webauthn](https://github.com/waffle-commons/documentation/blob/main/reference/webauthn.md)
+- Explanation: [Universal Authentication Bridge](https://github.com/waffle-commons/documentation/blob/main/explanation/authentication-universal-bridge.md)
+- Explanation: [WebAuthn / passkeys](https://github.com/waffle-commons/documentation/blob/main/explanation/webauthn-passkeys.md)
+
+Design rationale: RFC-021 — Universal Authentication Bridge (monorepo `project_system/RFCs/`).
