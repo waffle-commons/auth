@@ -1,6 +1,6 @@
 {
     "name": "waffle-commons/auth",
-    "description": "Auth component for Waffle framework.",
+    "description": "The Universal Authentication Bridge for Waffle Commons (RFC-021): JWT, OAuth2/OIDC, HMAC assertions, API-key/Basic and WebAuthn passkeys behind one stateless, fail-closed authenticator surface.",
     "type": "library",
     "license": "MIT",
     "autoload": {
@@ -70,10 +70,10 @@
             "@tests"
         ],
         "ci": [
-          "@mago",
-          "@tests",
-          "composer audit",
-          "vendor/bin/psalm --taint-analysis"
+            "@mago",
+            "@tests",
+            "composer audit",
+            "vendor/bin/psalm --taint-analysis"
         ]
     },
     "config": {
