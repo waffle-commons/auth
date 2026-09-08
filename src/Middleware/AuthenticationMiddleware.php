@@ -43,6 +43,7 @@ final readonly class AuthenticationMiddleware implements MiddlewareInterface
             $identity = $this->bridge->authenticate($request);
         } catch (AuthenticationExceptionInterface $e) {
             $this->logger?->warning('Authentication rejected.', [
+                'ip' => $request->getServerParams()['REMOTE_ADDR'] ?? 'unknown',
                 'uri' => (string) $request->getUri(),
                 'reason' => $e->getMessage(),
             ]);

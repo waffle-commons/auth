@@ -5,6 +5,18 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and the project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 Released in lockstep with the Waffle Commons umbrella tag.
 
+## [0.1.0-beta6] — 2026-09
+
+**Theme: authentication hardening.**
+
+### Fixed
+- `BasicAuthenticator` always performs a password-hash-shaped comparison against a precomputed dummy hash, closing the username-enumeration timing side-channel that contradicted its own constant-time docblock (CWE-208).
+- `StaticKeyResolver` enforces the `Constant::MIN_SECRET_BYTES` (32) floor for HS* algorithms at construction, matching every sibling secret consumer; previously only an empty string was rejected.
+- Authentication-failure audit logging carries the client IP and is wired to the SECURITY channel in both reference apps (Beta6 audit FIX-01).
+
+### Documentation
+- The README now links into the central Diátaxis documentation tree (DOC-02).
+
 ## [0.1.0-beta5] — 2026-07-08
 
 **Theme: WebAuthn / passkeys (RFC-021 AUTH-01).**
