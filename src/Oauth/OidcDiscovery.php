@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Waffle\Commons\Auth\Oauth;
 
+use IgorPhp\IgorBundle\Attribute\WorkerSafe;
 use JsonException;
 use Psr\Http\Client\ClientExceptionInterface;
 use Psr\Http\Client\ClientInterface;
@@ -28,6 +29,9 @@ final readonly class OidcDiscovery implements DiscoveryInterface
     ) {}
 
     #[\Override]
+    #[WorkerSafe(
+        reason: 'caches the provider public discovery document in the injected PSR-16 store (shared and TTL-bound by design); no worker memory is mutated',
+    )]
     public function discover(string $issuer): ProviderMetadataInterface
     {
         $normalizedIssuer = rtrim($issuer, '/');
