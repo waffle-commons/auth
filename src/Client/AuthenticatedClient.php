@@ -18,7 +18,8 @@ use Waffle\Commons\Contracts\Auth\CredentialsProviderInterface;
  * The decorator itself is transport- and scheme-agnostic; each provider
  * decides applicability (`supports()`, host allow-list) and never
  * overwrites an existing header. `waffle-commons/http-client` stays pure
- * transport.
+ * transport. Over a settling client, {@see AuthenticatedSettlingClient}
+ * keeps batches and promises concurrent.
  */
 final readonly class AuthenticatedClient implements ClientInterface
 {
@@ -35,14 +36,6 @@ final readonly class AuthenticatedClient implements ClientInterface
     #[\Override]
     public function sendRequest(RequestInterface $request): ResponseInterface
     {
-        foreach ($this->providers as $provider) {
-            if (!$provider->supports($request)) {
-                continue;
-            }
-
-            $request = $provider->apply($request);
-        }
-
-        return $this->inner->sendRequest($request);
+        return $this->inner->sendRequest(Credentials::applied($this->providers, $request));
     }
 }

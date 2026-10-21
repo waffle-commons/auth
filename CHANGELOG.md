@@ -5,6 +5,11 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and the project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 Released in lockstep with the Waffle Commons umbrella tag.
 
+## [Unreleased]
+
+### Added
+- `Client\AuthenticatedSettlingClient` (RFC-021 §4.7, RFC-024 §3.3) — the outbound credentials decorator over a settling client (the contracts' `HttpClient\SettlingClientInterface`): every supporting provider attaches its credentials to each request, and `sendRequests()`, `settleRequests()` and `promise()` go to the inner client as one batch or promise instead of one request at a time. Put it under the resilience decorators so credentials are applied again on every attempt. `AuthenticatedClient` stays the plain PSR-18 decorator; both share `Client\Credentials`.
+
 ## [0.1.0-beta6] — 2026-09
 
 **Theme: authentication hardening.**
