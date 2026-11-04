@@ -48,6 +48,7 @@ composer require waffle-commons/auth
 | `Waffle\Commons\Auth\Oauth\OauthClient` | Authorization-code + PKCE (S256) and client-credentials grants over any PSR-18 client. |
 | `Waffle\Commons\Auth\Oauth\OidcDiscovery` | `/.well-known/openid-configuration` resolution, PSR-16 cached. |
 | `Waffle\Commons\Auth\Client\AuthenticatedClient` | PSR-18 decorator applying host-gated `CredentialsProviderInterface`s to outgoing requests. |
+| `Waffle\Commons\Auth\Client\AuthenticatedSettlingClient` | *Beta-7* (RFC-021 §4.7, RFC-024 §3.3): the same credentials over a `SettlingClientInterface`. `sendRequests()`, `settleRequests()` and `promise()` reach the inner client as one batch or promise, not one request at a time. Put it under the resilience decorators, so credentials are applied again on every attempt; both clients share `Client\Credentials`. |
 
 ## 🔐 Security mandates (RFC-021 §5)
 
