@@ -90,7 +90,12 @@ final class JwtValidatorTest extends AbstractTestCase
     public function testTamperedSignatureIsRejected(): void
     {
         $token = JwtMinter::hs256(self::sharedSecret(), $this->claims());
-        $tampered = substr($token, 0, -2) . 'xx';
+        // Swap a mid-signature character: overwriting the tail can decode to the same bytes, as the
+        // last base64url character of a 32-byte MAC carries only 4 significant bits.
+        $segments = explode('.', $token);
+        $signature = $segments[2] ?? '';
+        $signature[10] = $signature[10] === 'A' ? 'B' : 'A';
+        $tampered = $segments[0] . '.' . ($segments[1] ?? '') . '.' . $signature;
 
         $this->expectException(InvalidTokenException::class);
         $this->expectExceptionMessage('signature');

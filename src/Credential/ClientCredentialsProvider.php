@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Waffle\Commons\Auth\Credential;
 
+use IgorPhp\IgorBundle\Attribute\WorkerSafe;
 use Psr\Http\Message\RequestInterface;
 use Psr\SimpleCache\CacheInterface;
 use Waffle\Commons\Auth\Exception\OauthException;
@@ -69,6 +70,9 @@ final readonly class ClientCredentialsProvider implements CredentialsProviderInt
      *
      * @throws \Waffle\Commons\Contracts\Auth\Exception\OauthExceptionInterface
      */
+    #[WorkerSafe(
+        reason: 'caches the app-level client-credentials token in the injected PSR-16 store (shared and TTL-bound by design, no per-user data); no worker memory is mutated',
+    )]
     private function accessToken(): string
     {
         try {
