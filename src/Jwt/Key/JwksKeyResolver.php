@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Waffle\Commons\Auth\Jwt\Key;
 
-use IgorPhp\IgorBundle\Attribute\WorkerSafe;
 use JsonException;
 use Psr\Http\Client\ClientExceptionInterface;
 use Psr\Http\Client\ClientInterface;
@@ -72,9 +71,6 @@ final readonly class JwksKeyResolver implements KeyResolverInterface
      * @throws InvalidTokenException Unreachable/malformed JWKS document, or a
      *         cache backend that rejects the internally generated key.
      */
-    #[WorkerSafe(
-        reason: 'caches the issuer public JWKS in the injected PSR-16 store (shared and TTL-bound by design); no worker memory is mutated',
-    )]
     private function keys(): array
     {
         $cacheKey = 'waffle.auth.jwks.' . hash('sha256', $this->jwksUri);
